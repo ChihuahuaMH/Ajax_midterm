@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Ajax</title>
+		<link rel="stylesheet" href="/stylesheets/style.css" />
+	</head>
+	<body>
+		<h3>ajax request</h3>
+		<button>click</button>
+		<script>
+			// 獲取button按鈕
+			var btn = document.querySelector("button");
+			// 點擊事件
+			btn.onclick = function () {
+				// 建立 XMLHttpRequest
+				var xhr = new XMLHttpRequest();
+				// 設定發送訊息
+				xhr.open("GET", "/geta", true);
+				// 發送訊息
+				xhr.send();
+			};
+		</script>
+	</body>
+</html>
