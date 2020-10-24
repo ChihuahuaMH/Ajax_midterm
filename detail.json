@@ -1,8 +1,121 @@
 [
 	{
+		"id": 0,
+		"username": "Sailor_Moon",
+		"description": "We are sailors! Do you like this look <3 ?",
+		"tag": ["cosplay", "sailor"],
+		"reply": 99
+	},
+	{
+		"id": 1,
 		"username": "Sailor_Moon",
 		"description": "I am Sailor Moon! I stand for love. And I also stand for justice. And in the name of the Moon, I will punish you!",
 		"tag": ["cosplay", "beauty"],
 		"reply": 87
+	},
+	{
+		"id": 2,
+		"username": "Movie_Chi",
+		"description": "'吉牠'看起來嚇人嗎？萬聖節快到了，這造型很應景呀！不給糖就搗蛋～",
+		"tag": ["cosplay", "it", "HallowWeen"],
+		"reply": 64
+	},
+	{
+		"id": 3,
+		"username": "Apple",
+		"description": "リンゴです",
+		"tag": ["fruit"],
+		"reply": 42
+	},
+	{
+		"id": 4,
+		"username": "la_citation",
+		"description": "Tu es comme une fleur qui fleurit magnifiquement",
+		"tag": ["flower"],
+		"reply": 88
+	},
+	{
+		"id": 5,
+		"username": "CHImemes",
+		"description": "吐司吉，好吃又營養的吉娃娃！",
+		"tag": ["food", "toast"],
+		"reply": 0
+	},
+	{
+		"id": 6,
+		"username": "CHImemes",
+		"description": "傳說中，日本有種忍者，他們善於偽裝成桃子，等待著人們發現他們...",
+		"tag": ["ninja", "peach"],
+		"reply": 88
+	},
+	{
+		"id": 7,
+		"username": "CHImemes",
+		"description": "твою мать!",
+		"tag": ["russia", "scare"],
+		"reply": 3
+	},
+	{
+		"id": 8,
+		"username": "CHImemes",
+		"description": "嬌滴滴的艾瑪史吉，是現在最紅的女明星。",
+		"tag": ["beauty", "actress"],
+		"reply": 999
+	},
+	{
+		"id": 9,
+		"username": "baddest_bandit",
+		"description": "給我錢！不然我就讓你看更多的吉娃娃！！",
+		"tag": ["wtf"],
+		"reply": 78
+	},
+	{
+		"id": 10,
+		"username": "CHImemes",
+		"description": "Billy is here! Today I will rob the rich and help the poor",
+		"tag": ["Billy", "Hero"],
+		"reply": 987
+	},
+	{
+		"id": 11,
+		"username": "Apple",
+		"description": "新CMキャラクター！",
+		"tag": ["CM", "popstar"],
+		"reply": 999
+	},
+	{
+		"id": 12,
+		"username": "Movie_Chi",
+		"description": "「既然大家都是同門師兄弟，乾脆刮得多少都分兩份，我拿大份，你拿小份。」「我全都要！」",
+		"tag": ["CM", "popstar"],
+		"reply": 999
+	},
+	{
+		"id": 13,
+		"username": "baddest_bandit",
+		"description": "這個...不是我搶來的喔",
+		"tag": ["wtf"],
+		"reply": 0
+	},
+	{
+		"id": 14,
+		"username": "8add9",
+		"description": "「蛤！有種在給我說一次！」「是ㄗ...再啦！」",
+		"tag": ["wtf"],
+		"reply": 66
+	},
+	{
+		"id": 15,
+		"username": "RelaxLife",
+		"description": "お風呂に入ります~♪",
+		"tag": ["relax", "shower"],
+		"reply": 567
+	},
+	{
+		"id": 16,
+		"username": "Banana_Vendor",
+		"description": "今天在一中擺攤，來跟我買香蕉吧！",
+		"tag": ["banana", "fruit", "sell"],
+		"reply": 234
 	}
 ]
