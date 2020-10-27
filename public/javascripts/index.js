@@ -65,6 +65,7 @@ const create_card = card_info => $(`
  * 取得Container資訊
  * @returns {object} ContainerInfo Container資訊
  * @returns {number} ContainerInfo.containerWidth Container寬度
+ * @returns {number} ContainerInfo.containerHeight Container高度
  * @returns {number} ContainerInfo.maxColumnNumer 單行最大數量
  * @returns {number} ContainerInfo.currentCardMargin card間隔
  */
