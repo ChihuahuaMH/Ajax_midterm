@@ -61,6 +61,24 @@ const create_card = card_info => $(`
 </div>
 `);
 
+/**
+ * 取得Container資訊
+ * @returns {object} ContainerInfo Container資訊
+ * @returns {number} ContainerInfo.containerWidth Container寬度
+ * @returns {number} ContainerInfo.maxColumnNumer 單行最大數量
+ * @returns {number} ContainerInfo.currentCardMargin card間隔
+ */
+const getContainerInfo = () => {
+    const containerWidth = container.width();
+    const maxColumnNumer = Math.max(Math.floor((containerWidth + cardMinMargin - containerPadding * 2) / (cardWidth + cardMinMargin)), 1);
+    const currentCardMargin = (containerWidth - containerPadding * 2 - cardWidth * maxColumnNumer) / Math.max(maxColumnNumer - 1, 1);
+    return {
+        containerWidth,
+        maxColumnNumer,
+        currentCardMargin
+    };
+}
+
 const getRandomImage = () => {
     let appendColumn = getMinHeightColumn();
     if (columnHeights[appendColumn] < container.prop('scrollHeight') - vacancyMaxHeight) {
