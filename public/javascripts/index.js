@@ -79,6 +79,32 @@ const getContainerInfo = () => {
     };
 }
 
+/**
+ * 取得最小高度欄
+ * @returns {number} minHeightColumn 最小高度欄的index
+ */
+const getMinHeightColumn = () => columnHeights.indexOf(Math.min(...columnHeights));
+
+/**
+ * 為Card取得一個位址資訊
+ * @param {number} margin card間距
+ * @returns {object} ImageLocationInfo Card位址資訊
+ * @returns {number} ImageLocationInfo.appendColumn Card擺放欄位index
+ * @returns {object} ImageLocationInfo.css Card樣式
+ * @returns {number} ImageLocationInfo.css.left Card left樣式
+ * @returns {number} ImageLocationInfo.css.top Card top樣式
+ */
+const getImageLocationInfo = (margin) => {
+    const appendColumn = getMinHeightColumn();
+    return {
+        appendColumn,
+        css: {
+            left: containerPadding + (margin + cardWidth) * appendColumn,
+            top: columnHeights[appendColumn] + cardMinMargin
+        }
+    }
+}
+
 const getRandomImage = () => {
     let appendColumn = getMinHeightColumn();
     if (columnHeights[appendColumn] < container.prop('scrollHeight') - vacancyMaxHeight) {
