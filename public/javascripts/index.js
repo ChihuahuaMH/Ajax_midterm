@@ -26,7 +26,7 @@ const create_card = card_info => $(`
 
     <!-- tag -->
     <div class="px-2">
-        ${card_info.tag.map(v=>`
+        ${card_info.tag.map(v => `
         <button
             class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
         >
