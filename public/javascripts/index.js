@@ -25,7 +25,7 @@ const create_card = cardInfo => $(`
         <a href="#" class="text-lg text-blue-500">FOLLOW</a href="#">
     </div>
 
-    <img class="w-full" src="/images/${cardInfo.id}.jpg" />
+    <img class="w-full" src="/images/${cardInfo.id}.${cardInfo.type || "jpg"}" />
 
     <!-- description -->
     <div class="px-4 py-6">
