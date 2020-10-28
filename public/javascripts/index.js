@@ -1,32 +1,40 @@
 let columnHeights = [];
-// let 
+let containerSurpass = [];
 let cards = [];
-let currentCardMargin;
 let appendCardIndex = 0;
 const container = $("#container");
 const containerPadding = 20;
 const cardWidth = 330;
 const cardMinMargin = 25;
 const vacancyMaxHeight = 300;
+let appending = false;
 
-const create_card = card_info => $(`
+/**判斷是否滑到最底 */
+const isFooter = () => document.documentElement.clientHeight + document.documentElement.scrollTop == document.documentElement.scrollHeight;
+
+/**
+ * 建立Card JQuery物件
+ * @param {object} cardInfo Card相關資訊
+ * @returns {object} Card JQuery物件
+ */
+const create_card = cardInfo => $(`
 <div class="rounded-md shadow-lg bg-white absolute card" style="width: ${cardWidth}px;">
     <!-- card head -->
     <div class="p-4 bg-white flex justify-between">
-        <div class="font-bold text-lg text-teal-800">${card_info.username}</div>
+        <div class="font-bold text-lg text-teal-800">${cardInfo.username}</div>
         <a href="#" class="text-lg text-blue-500">FOLLOW</a href="#">
     </div>
 
-    <img class="w-full" src="/images/${card_info.id}.jpg" />
+    <img class="w-full" src="/images/${cardInfo.id}.jpg" />
 
     <!-- description -->
     <div class="px-4 py-6">
-        <p class="text-gray-700 text-base">${card_info.description}</p>
+        <p class="text-gray-700 text-base">${cardInfo.description}</p>
     </div>
 
     <!-- tag -->
     <div class="px-2">
-        ${card_info.tag.map(v => `
+        ${cardInfo.tag.map(v => `
         <button
             class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2"
         >
@@ -42,7 +50,7 @@ const create_card = card_info => $(`
             <a href="#">
                 <img src="/images/reply.svg" alt="reply" class="w-6 h-6 mr-1">
             </a>
-            <span>${card_info.reply}</span>
+            <span>${cardInfo.reply}</span>
         </div>
 
         <!-- like and share -->
@@ -75,6 +83,7 @@ const getContainerInfo = () => {
     const currentCardMargin = (containerWidth - containerPadding * 2 - cardWidth * maxColumnNumer) / Math.max(maxColumnNumer - 1, 1);
     return {
         containerWidth,
+        containerHeight: container.height(),
         maxColumnNumer,
         currentCardMargin
     };
@@ -82,90 +91,88 @@ const getContainerInfo = () => {
 
 /**
  * 取得最小高度欄
- * @returns {number} minHeightColumn 最小高度欄的index
+ * @returns {number|true} minHeightColumn 最小高度欄的index
  */
-const getMinHeightColumn = () => columnHeights.indexOf(Math.min(...columnHeights));
+const getMinHeightColumn = () => {
+    const columnIndex = columnHeights.indexOf(Math.min(...columnHeights));
+    return containerSurpass[columnIndex] || columnIndex;
+};
 
 /**
- * 為Card取得一個位址資訊
+ * 計算Image位置
+ * @param {number} appendColumn Image放在第幾欄
  * @param {number} margin card間距
- * @returns {object} ImageLocationInfo Card位址資訊
- * @returns {number} ImageLocationInfo.appendColumn Card擺放欄位index
- * @returns {object} ImageLocationInfo.css Card樣式
- * @returns {number} ImageLocationInfo.css.left Card left樣式
- * @returns {number} ImageLocationInfo.css.top Card top樣式
+ * @returns {object} imageCSS Card 樣式
+ * @returns {number} imageCSS.left Card left樣式
+ * @returns {number} imageCSS.top Card top樣式
  */
-const getImageLocationInfo = (margin) => {
-    const appendColumn = getMinHeightColumn();
+const calcImageCSS = (appendColumn, margin) => {
     return {
-        appendColumn,
-        css: {
-            left: containerPadding + (margin + cardWidth) * appendColumn,
-            top: columnHeights[appendColumn] + cardMinMargin
-        }
+        left: containerPadding + (margin + cardWidth) * appendColumn,
+        top: columnHeights[appendColumn] + cardMinMargin
     }
 }
 
-const getRandomImage = () => {
-    let appendColumn = getMinHeightColumn();
-    if (columnHeights[appendColumn] < container.prop('scrollHeight') - vacancyMaxHeight) {
-        $.ajax({
-            type: "GET",
-            url: `/random?_=${Math.random()}`,
-            success: function (response) {
-                let card = create_card(response);
-                cards.push(card);
-                card.css({
-                    left: containerPadding + (currentCardMargin + cardWidth) * appendColumn,
-                    top: columnHeights[appendColumn] + cardMinMargin
-                });
-                container.append(card);
-                setTimeout(() => {
-                    columnHeights[appendColumn] += cardMinMargin + card.height();
-                    getRandomImage();
-                }, 50);
-            }
-        });
+/**
+ * 取得隨機圖片資訊
+ * @returns {Promise} ajax request物件
+ */
+const getRandomImageInfo = async () => {
+    return await $.ajax({
+        type: "GET",
+        url: `/random?_=${Math.random()}`
+    });
+}
+
+/**
+ * 新增Card填滿畫面
+ */
+const fillContainer = async () => {
+    appending = true;
+    const {
+        currentCardMargin,
+        containerHeight
+    } = getContainerInfo();
+    let columnIndex;
+    while (isFooter()) {
+        while ((columnIndex = getMinHeightColumn()) !== true) {
+            console.assert(typeof columnIndex == "number", "columnIndex's type is not number");
+            const card = create_card(await getRandomImageInfo());
+            cards.push(card);
+            card.css(calcImageCSS(columnIndex, currentCardMargin));
+            container.append(card);
+            await new Promise(resolve => setTimeout(resolve, 50));
+            columnHeights[columnIndex] += cardMinMargin + card.height();
+            containerSurpass[columnIndex] = columnHeights[columnIndex] > containerHeight;
+        }
+        containerSurpass = [];
     }
-};
+    appending = false;
+}
 
-const getMinHeightColumn = () => columnHeights.indexOf(Math.min(...columnHeights));
-
-const appendImages = () => {
-    for (; appendCardIndex < cards.length; appendCardIndex++) {
-        let appendColumn = getMinHeightColumn();
-        cards[appendCardIndex].css({
-            left: containerPadding + (currentCardMargin + cardWidth) * appendColumn,
-            top: columnHeights[appendColumn] + cardMinMargin
-        });
-        columnHeights[appendColumn] += cardMinMargin + cards[appendCardIndex].height();
-    }
-    getRandomImage();
-};
-
+/**
+ * 重新渲染瀑布流畫面
+ */
 const reRender = () => {
-    const containerWidth = container.width();
-    let maxColumnNumer = Math.max(Math.floor((containerWidth + cardMinMargin - containerPadding * 2) / (cardWidth + cardMinMargin)), 1);
-    currentCardMargin = (containerWidth - containerPadding * 2 - cardWidth * maxColumnNumer) / Math.max(maxColumnNumer - 1, 1);
+    const {
+        maxColumnNumer,
+        currentCardMargin
+    } = getContainerInfo();
     columnHeights = [];
     for (let i = 0; i < maxColumnNumer; i++) columnHeights[i] = 0;
     appendCardIndex = 0;
-    appendImages();
+    for (; appendCardIndex < cards.length; appendCardIndex++) {
+        let columnIndex = getMinHeightColumn();
+        cards[appendCardIndex].css(calcImageCSS(columnIndex, currentCardMargin));
+        columnHeights[columnIndex] += cardMinMargin + cards[appendCardIndex].height();
+    }
 };
 
-window.addEventListener("resize", reRender);
+$(window).resize(reRender);
+
+$(window).on("scroll", async () => !appending && isFooter() && await fillContainer());
 
 window.onload = () => {
     reRender();
-    // container.append(create_card(1).css("left", 20));
-    // container.append(create_card(0).css("left", 20 + (330 + 30) * 1));
-    // container.append(create_card(2).css("left", 20 + (330 + 30) * 2));
-    // container.append(create_card(3).css("left", 20 + (330 + 30) * 3));
-    // container.append(create_card(4).css("left", 20 + (330 + 30) * 4));
-    // container.append(create_card(5).css("left", 20).css("top", 650));
-    // container.append(create_card(6).css("left", 20 + (330 + 30) * 1).css("top", 650));
-    // container.append(create_card(7).css("left", 20 + (330 + 30) * 2).css("top", 650));
-    // container.append(create_card(8).css("left", 20 + (330 + 30) * 3).css("top", 650));
-    // container.append(create_card(9).css("left", 20 + (330 + 30) * 4).css("top", 650));
-
+    fillContainer();
 }
